@@ -18,15 +18,12 @@ class db_function{
         $stmt->bind_param("s",$email);
         $stmt->execute();
         $stmt->store_result();
-      
         if($stmt->num_rows>0){
             $stmt->close();
-            echo "TRUE";
             return TRUE;
         }
         else {
             $stmt->close();
-             echo "false" ;
             return FALSE;
         }
        
@@ -63,8 +60,6 @@ class db_function{
         $stmt=$this->conn->prepare("insert into block_users (device_id,user_fk) values (?,?)  ");
         $stmt->bind_param("si",$device_id,$user_fk);
         
-        $stmt->bind_result("$user_fk");
-        
         if($stmt->execute()){
             $stmt->close();
             return true;
@@ -84,18 +79,39 @@ class db_function{
         $stmt->bind_param("ssss",$name,$email,$password,$img_url);
         if($stmt->execute()){
             // return user_fk 
-             $stmt=$this->conn->prepare("insert into users (name,email,password,img_url) values (?,?,?,?)  ");
-             $stmt->bind_param("ssss",$name,$email,$password,$img_url);
-        
+            $stmt=$this->conn->prepare("select user_id from users where email =? ");
+            $stmt->bind_param("s",$email);
+         
+            $stmt->bind_result($user_fk);
+            $stmt->fetch();
+           
             $stmt->close();
-            return true;
+            return $user_fk;
         }
             
         else{
-            $stmt->close();       
+            $stmt->close(); 
             return false;
         }
            
+        
+    }
+    
+    public function getEmail_password($email,$password){
+        $stmt=$this->conn->prepare("select email,password from users where email=? and password=?");
+        $stmt->bind_param("ss",$email,$password);
+        $stmt->execute();
+        $stmt->store_result();
+        if($stmt->num_rows>0){
+            $stmt->close();
+            echo 'true';
+            return TRUE;
+        }
+        else{
+            $stmt->close();
+            echo 'false';
+            return FALSE;
+        }
         
     }
 }
