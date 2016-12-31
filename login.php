@@ -21,7 +21,7 @@ if(isset($_POST['email']) & isset($_POST['password'])
             $response['msg']='Login succussfully';
             $response['user_id']=$loginStatus['user_id'];
             $response['name']=$loginStatus['name'];
-            $reponse['error']=False;
+            $response['error']=False;
             echo json_encode($response);    
         }
         else{

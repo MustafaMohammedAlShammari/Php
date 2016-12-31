@@ -4,7 +4,7 @@ class db_function{
     private $conn;
     
     public function __construct() {
-        require_once 'DB_connect.php';
+        require_once 'db_connect.php';
         $db=new db_connect();
         $this->conn=$db->connect();
     }
@@ -44,13 +44,13 @@ class db_function{
         if($stmt->num_rows>0){
             $stmt->close();
             if($status)             
-                return $result['userStatus']='block';
+                return 'block';
 	
-            return $result['userStatus']='unBlock';
+            return  'unBlock';
         }
         else{
             $stmt->close();
-           return $result['userStatus']='newUser';
+           return  'newUser';
         }
        
     }
@@ -81,10 +81,11 @@ class db_function{
             // return user_fk 
             $stmt=$this->conn->prepare("select user_id from users where email =? ");
             $stmt->bind_param("s",$email);
-         
+            $stmt->execute();
+            
             $stmt->bind_result($user_fk);
             $stmt->fetch();
-           
+       
             $stmt->close();
             return $user_fk;
         }
@@ -98,19 +99,30 @@ class db_function{
     }
     
     public function getEmail_password($email,$password){
-        $stmt=$this->conn->prepare("select email,password from users where email=? and password=?");
+        $stmt=$this->conn->prepare("select user_id,name, password from users where email=? and password=?");
         $stmt->bind_param("ss",$email,$password);
         $stmt->execute();
+        
+               
         $stmt->store_result();
+        
         if($stmt->num_rows>0){
+      
+            $stmt->bind_result($user_id,$name,$dbPassord);
+            $stmt->fetch();
             $stmt->close();
-            echo 'true';
-            return TRUE;
+         
+             
+            if ($dbPassord == $password) {
+                $response =array("user_id"=>$user_id,"name"=>$name);
+                
+                return $response;
+            }
+            return false;
         }
         else{
             $stmt->close();
-            echo 'false';
-            return FALSE;
+            return false;
         }
         
     }
