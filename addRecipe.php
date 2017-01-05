@@ -1,8 +1,11 @@
 <?php
 
 /* 
-  file is edited
- * glfjgldf
+ * To change this license header, choose License Headers in 
+ * lkknjkljnlnl
+ * kjkhkProject Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
     require_once 'include/add_recipe_function.php';
     $db=new add_recipe_function();
