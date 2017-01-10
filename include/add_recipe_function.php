@@ -10,7 +10,7 @@
  * Description of add_recipe_function
  *
  * @author Mahmood Ali
- * Mustafa Mhammed
+ * Mustafa Mohammed
  */
 class add_recipe_function {
     //put your code here
